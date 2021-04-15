@@ -6,8 +6,10 @@ void setup() {
 }
 
 void loop() {
+  int data = 0;
   if(Serial1.available()){
-    Serial.print(Serial1.read());
+    data = Serial.read();
+    Serial.print(data);
     Serial.print(" ");
     i++;
   }
