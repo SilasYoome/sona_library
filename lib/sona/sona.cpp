@@ -38,11 +38,8 @@ bool Sona::uart2_data(){
             
             check_num += sona_data_buffer[sona_data_buffer_flag];
 
-            //如果沒有觸發標頭錯誤的條件時，sona_data_buffer_flag繼續加上去
-            sona_data_buffer_flag++;
-
             //當sona_data_buffer_flag>9，表示buffer放滿，開始做資料處理
-            if(sona_data_buffer_flag > message_tail){
+            if(sona_data_buffer_flag++ > message_tail){
 
                  //確認標尾正確後放入另外一個空間sona_data，用來存正確的資料
                 if(check_num-sona_data_buffer[sona_data_buffer_flag] == sona_data_buffer[sona_data_buffer_flag]){
