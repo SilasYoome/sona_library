@@ -1,10 +1,12 @@
-#include "sona.h"
+#include "Sona.h"
 #include "Arduino.h"
 #include <string.h>
 
 Sona::Sona(int _uart_num,int _uart_baud):uart_num(_uart_num),uart_baud(_uart_baud){
     sona_data_buffer[10] = {0};
     sona_data_buffer_flag = 0;
+    check_num = 0;
+    message_tail = 9;
 
 }
 void Sona::init(){
@@ -13,14 +15,11 @@ void Sona::init(){
     }
 }
 
-void Sona::data_calculation(){
-    memcpy(sona_data,sona_data_buffer,sizeof(sona_data_buffer));
-}
-
 void Sona::get_data(unsigned char* data,int data_size){
     if(data_size == sizeof(sona_data)){
-        for(int i = 0;i<data_size;i++){
-            data[i] = sona_data[i];
+        //僅將sona[1] ~ sona[8]傳出，[0]與[9]是標頭標尾，不需要傳出
+        for(int i = 1;i<data_size;i++){
+            data[i] = sona_data[i]++;
         }
     }
 }
@@ -42,15 +41,9 @@ bool Sona::uart2_data(){
             //當sona_data_buffer放滿時，開始做資料處理
             if(sona_data_buffer_flag ++> 9){
 
-                unsigned char check_num = 0;//確認標尾是否正確的暫存空間
-
-                //標尾內容為[0] ～ [8]相加後 == [9]
-                for(int i = 0;i<9;i++){
-                    check_num += sona_data_buffer[i];
-                }
-                 //確認標尾正確
-                if(check_num == sona_data_buffer[9]){
-                    data_calculation();
+                 //確認標尾正確後放入另外一個空間sona_data，用來存正確的資料
+                if(check_num-sona_data_buffer[sona_data_buffer_flag] == sona_data_buffer[sona_data_buffer_flag]){
+                    memcpy(sona_data,sona_data_buffer,sizeof(sona_data_buffer));
                 }
                 check_num = 0;//確認碼暫存空間歸零
                 sona_data_buffer_flag = 0;//旗標歸0

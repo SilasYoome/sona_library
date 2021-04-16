@@ -9,7 +9,7 @@ void setup() {
 }
 
 void loop() {
-if(s.uart2_data()){
+while(s.uart2_data()){
       s.get_data(data,sizeof(data));
       for(int i = 0;i < 10;i++){
     Serial.print(data[i]);
