@@ -1,20 +1,24 @@
 #include <Arduino.h>
-int i = 0;
+#include "sona.h"
+
+Sona s(2,9600);
+unsigned char data[10];
 void setup() {
   Serial.begin(9600);
-  Serial1.begin(9600);
+  s.init();
 }
 
 void loop() {
-  int data = 0;
-  if(Serial1.available()){
-    data = Serial.read();
-    Serial.print(data);
+while(s.uart2_data()){
+      s.get_data(data,sizeof(data));
+      for(int i = 0;i < 10;i++){
+    Serial.print(data[i]);
     Serial.print(" ");
-    i++;
-  }
-  if(i==10) 
-    {Serial.println();
-    i = 0;
-    }
- }
+      }
+  Serial.println();
+}
+}
+
+void serialEvent2(){
+  //s.uart2_data();
+}
