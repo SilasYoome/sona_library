@@ -13,14 +13,10 @@ void Sona::init(){
     }
 }
 
-void Sona::data_calculation(){
-    memcpy(sona_data,sona_data_buffer,sizeof(sona_data_buffer));
-}
-
 void Sona::get_data(unsigned char* data,int data_size){
     if(data_size == sizeof(sona_data)){
         for(int i = 0;i<data_size;i++){
-            data[i] = sona_data[i];
+            data[i] = sona_data[i]++;
         }
     }
 }
@@ -39,7 +35,7 @@ bool Sona::uart2_data(){
             //如果沒有觸發標頭錯誤的條件時，sona_data_buffer_flag繼續加上去
             sona_data_buffer_flag++;
 
-            //當sona_data_buffer放滿時，開始做資料處理
+            //當sona_data_        return true;buffer放滿時，開始做資料處理
             if(sona_data_buffer_flag > 9){
 
                 unsigned char check_num = 0;//確認標尾是否正確的暫存空間
@@ -50,7 +46,7 @@ bool Sona::uart2_data(){
                 }
                  //確認標尾正確
                 if(check_num == sona_data_buffer[9]){
-                    data_calculation();
+                    memcpy(sona_data,sona_data_buffer,sizeof(sona_data_buffer));
                 }
                 check_num = 0;//確認碼暫存空間歸零
                 sona_data_buffer_flag = 0;//旗標歸0

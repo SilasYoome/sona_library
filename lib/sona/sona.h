@@ -6,7 +6,6 @@ class Sona{
         Sona(int _uart_num,int _uart_baud);
         void init();//初始化
         void get_data(unsigned char* data,int data_size) ;//將sona_data回傳
-        void data_calculation();//將確認的資料從sona_data_buffer放進sona_data裡面，其他程式要使用資料時主要回傳sona_data
         bool uart2_data();//uart2中斷接收
     private:
         int uart_num;//uart port 預設是uart2
