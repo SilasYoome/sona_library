@@ -37,10 +37,10 @@ bool Sona::uart2_data(){
             break;
         } else{
             //如果沒有觸發標頭錯誤的條件時，sona_data_buffer_flag繼續加上去
-            sona_data_buffer_flag++;
+            //sona_data_buffer_flag++;
 
             //當sona_data_buffer放滿時，開始做資料處理
-            if(sona_data_buffer_flag > 9){
+            if(sona_data_buffer_flag ++> 9){
 
                 unsigned char check_num = 0;//確認標尾是否正確的暫存空間
 
